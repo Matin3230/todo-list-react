@@ -1,7 +1,10 @@
 import React, { useState,useEffect } from "react";
 import "./Todo.css";
 
+
 const getLocalItems = () => {
+    // For Getting Item from LocalStorage
+
     let list = localStorage.getItem('lists');
     
     if (list)
@@ -22,13 +25,17 @@ const Todo = () => {
     const [isEditItem, setIsEditItem] = useState(null);
 
   
+    // For Adding Item in InputBox
+
     const addItem = () => {
         if (!inputData)
         {
             alert("Please Enter Data");
         }
-        else if (!togglebtn && inputData)
+
+        else if (!togglebtn && inputData)  
         {
+            // For Edit Button when it is at Input Box
             setItems(
                 items.map((ele) => {
                     if (ele.id === isEditItem)
@@ -43,8 +50,12 @@ const Todo = () => {
             settogglebtn(true);
             setInputData("");
             setIsEditItem(null);
-            }
-        else {
+        }
+            
+        else
+        {
+            // For Add Button 
+
             const allInputData = {
                 id: new Date().getTime().toString(),
                 name:inputData
@@ -55,19 +66,16 @@ const Todo = () => {
         }
     }
 
+    //  For Edit Button
+    const editItem = (ele) => {
 
-    const editItem = (id) => {
-
-        let newEditItem = items.find((ele) => {
-            return ele.id === id;   
-        })
-
-        setInputData(newEditItem.name);
+        setInputData(ele.name);
         settogglebtn(false);
-        setIsEditItem(id);
+        setIsEditItem(ele.id);
  
     }
 
+    // For Delete Button
     const deleteItem = (id) => {
         const updatedList = items.filter((ele)=> {
             return ele.id !== id;
@@ -76,12 +84,12 @@ const Todo = () => {
         setItems(updatedList);
     }
      
-
+    // For Deleting All items 
     const removeAll = () => {
         setItems([]);
     }
 
- 
+    // For Storing Values inside Local Storage when changes made to Items
     useEffect(() => {
         localStorage.setItem('lists', JSON.stringify(items))
     }, [items]);
@@ -99,7 +107,7 @@ const Todo = () => {
 
                     <div className="addItems">
                         <input type="text" placeholder="✍Add Items..." value={inputData} onChange={(event) => setInputData(event.target.value)}></input>
-                        
+                        {/*For Which Button should Show Add or Edit Button */}
                         {
                             togglebtn?<i className="fa fa-plus add-btn" title="Add Item"  onClick={addItem}></i> : <i className="far fa-edit add-btn" title="Edit Item" onClick={addItem}></i>
                         }
@@ -114,7 +122,7 @@ const Todo = () => {
                                     <div className="eachItem" key={currEle.id}>
                                         <h3> {currEle.name}</h3>
                                         <div className="todo-btn">
-                                        <i className="far fa-edit add-btn" title="Edit Item" onClick={()=>editItem(currEle.id)}></i>
+                                        <i className="far fa-edit add-btn" title="Edit Item" onClick={()=>editItem(currEle)}></i>
                                         <i className="far fa-trash-alt add-btn" title="Delete Item" onClick={()=>deleteItem(currEle.id)}></i>
                                         </div>
                                                     
